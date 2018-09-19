@@ -31,7 +31,7 @@ class RoutingServiceProvider extends ServiceProvider
 
     /**
      * Register the router instance.
-     *
+     * 注册路由实例
      * @return void
      */
     protected function registerRouter()

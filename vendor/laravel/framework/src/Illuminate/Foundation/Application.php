@@ -137,10 +137,12 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function __construct($basePath = null)
     {
+        //$basePath是.env所在目录
         if ($basePath) {
+            //为应用程序设置基路径  向instances属性数组中添加9个元素
             $this->setBasePath($basePath);
         }
-
+        //向容器注册基础的绑定  向instances属性数组中添加3个元素
         $this->registerBaseBindings();
 
         $this->registerBaseServiceProviders();
@@ -160,7 +162,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
 
     /**
      * Register the basic bindings into the container.
-     *
+     * 向容器注册基础的绑定
      * @return void
      */
     protected function registerBaseBindings()
@@ -171,6 +173,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
 
         $this->instance(Container::class, $this);
 
+        //创建一个新的包清单实例
         $this->instance(PackageManifest::class, new PackageManifest(
             new Filesystem, $this->basePath(), $this->getCachedPackagesPath()
         ));
@@ -178,15 +181,18 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
 
     /**
      * Register all of the base service providers.
-     *
+     * 向容器中注册所有的基础服务提供者。
      * @return void
      */
     protected function registerBaseServiceProviders()
     {
+        //注册事件提供者服务
         $this->register(new EventServiceProvider($this));
 
+        //注册日志提供者服务
         $this->register(new LogServiceProvider($this));
 
+        //注册路由提供者服务
         $this->register(new RoutingServiceProvider($this));
     }
 
@@ -258,7 +264,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
 
     /**
      * Set the base path for the application.
-     *
+     * 为应用程序设置基路径
      * @param  string  $basePath
      * @return $this
      */
@@ -273,25 +279,25 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
 
     /**
      * Bind all of the application paths in the container.
-     *
+     * 绑定所有的应用路径到容器中
      * @return void
      */
     protected function bindPathsInContainer()
     {
-        $this->instance('path', $this->path());
-        $this->instance('path.base', $this->basePath());
-        $this->instance('path.lang', $this->langPath());
-        $this->instance('path.config', $this->configPath());
-        $this->instance('path.public', $this->publicPath());
-        $this->instance('path.storage', $this->storagePath());
-        $this->instance('path.database', $this->databasePath());
-        $this->instance('path.resources', $this->resourcePath());
-        $this->instance('path.bootstrap', $this->bootstrapPath());
+        $this->instance('path', $this->path());                     //app目录路径
+        $this->instance('path.base', $this->basePath());            //基础路径
+        $this->instance('path.lang', $this->langPath());            //语言包路径
+        $this->instance('path.config', $this->configPath());        //配置信息路径
+        $this->instance('path.public', $this->publicPath());        //public目录路径
+        $this->instance('path.storage', $this->storagePath());      //存储路径
+        $this->instance('path.database', $this->databasePath());    //数据库目录路径
+        $this->instance('path.resources', $this->resourcePath());   //资源信息路径
+        $this->instance('path.bootstrap', $this->bootstrapPath());  //引导目录
     }
 
     /**
      * Get the path to the application "app" directory.
-     *
+     * 获取app应用目录路径
      * @param  string  $path Optionally, a path to append to the app path
      * @return string
      */
@@ -550,7 +556,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
 
     /**
      * Register a service provider with the application.
-     *
+     * 向容器中注册一个服务提供者
      * @param  \Illuminate\Support\ServiceProvider|string  $provider
      * @param  bool   $force
      * @return \Illuminate\Support\ServiceProvider
@@ -564,10 +570,13 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         // If the given "provider" is a string, we will resolve it, passing in the
         // application instance automatically for the developer. This is simply
         // a more convenient way of specifying your service provider classes.
+        // 如果给定的“提供者”是一个字符串，我们会解析它，为开发者自动传递应用实例，（就是会把字符串（一般是类名）实例化为对象）
+        // 这只是一种更方便的指定服务提供者类的方法。
         if (is_string($provider)) {
             $provider = $this->resolveProvider($provider);
         }
 
+        //执行服务提供者的register方法（如果提供者实例存在此方法）
         if (method_exists($provider, 'register')) {
             $provider->register();
         }
@@ -575,6 +584,8 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         // If there are bindings / singletons set as properties on the provider we
         // will spin through them and register them with the application, which
         // serves as a convenience layer while registering a lot of bindings.
+        // 如果提供者有bindings或者signletons属性的话，我们将对它们进行旋转，并将它们注册到应用程序中，
+        // 应用程序在注册大量绑定时充当一个方便的层。
         if (property_exists($provider, 'bindings')) {
             foreach ($provider->bindings as $key => $value) {
                 $this->bind($key, $value);
@@ -587,11 +598,14 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
             }
         }
 
+        // 标记该提供者已经被注册
         $this->markAsRegistered($provider);
 
         // If the application has already booted, we will call this boot method on
         // the provider class so it has an opportunity to do its boot logic and
         // will be ready for any usage by this developer's application logic.
+        // 如果应用程序已经启动（booted属性为true），我们会执行提供者的boot方法，使它可以去做自己的逻辑处理，
+        // 并且将为开发人员的应用程序逻辑的任何使用做好准备。
         if ($this->booted) {
             $this->bootProvider($provider);
         }
@@ -612,14 +626,14 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
 
     /**
      * Get the registered service provider instances if any exist.
-     *
+     * 获取已注册的服务提供者如果存在。
      * @param  \Illuminate\Support\ServiceProvider|string  $provider
      * @return array
      */
     public function getProviders($provider)
     {
         $name = is_string($provider) ? $provider : get_class($provider);
-
+        //Arr是一个辅助型的类库
         return Arr::where($this->serviceProviders, function ($value) use ($name) {
             return $value instanceof $name;
         });

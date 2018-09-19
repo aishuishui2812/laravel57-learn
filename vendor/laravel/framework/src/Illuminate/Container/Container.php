@@ -144,7 +144,7 @@ class Container implements ArrayAccess, ContainerContract
 
     /**
      * Determine if the given abstract type has been bound.
-     *
+     * 确定给定的抽象类型是否已经被绑定（即是否存在bindings、instances、aliases属性数组中）
      * @param  string  $abstract
      * @return bool
      */
@@ -205,7 +205,7 @@ class Container implements ArrayAccess, ContainerContract
 
     /**
      * Register a binding with the container.
-     *
+     * 注册一个绑定到容器中
      * @param  string  $abstract
      * @param  \Closure|string|null  $concrete
      * @param  bool  $shared
@@ -216,6 +216,8 @@ class Container implements ArrayAccess, ContainerContract
         // If no concrete type was given, we will simply set the concrete type to the
         // abstract type. After that, the concrete type to be registered as shared
         // without being forced to state their classes in both of the parameters.
+        // 如果没有给定第二个参数（或者空），我们将简单地将第二个参数（具体类型）设置和第一个参数相同的值（抽象类型），
+        // 在此之后，要注册为共享的具体类型，而不必强制在这两个参数中声明它们的类。
         $this->dropStaleInstances($abstract);
 
         if (is_null($concrete)) {
@@ -225,6 +227,8 @@ class Container implements ArrayAccess, ContainerContract
         // If the factory is not a Closure, it means it is just a class name which is
         // bound into this container to the abstract type and we will just wrap it
         // up inside its own Closure to give us more convenience when extending.
+        // 如果第二个参数（具体类型）不是一个闭包，那么意味着它只是一个类名，它被绑定到这个容器中抽象类型，
+        // 我们将把它封装在自己的闭包中，以便在扩展时提供更多的便利。
         if (! $concrete instanceof Closure) {
             $concrete = $this->getClosure($abstract, $concrete);
         }
@@ -234,6 +238,7 @@ class Container implements ArrayAccess, ContainerContract
         // If the abstract type was already resolved in this container we'll fire the
         // rebound listener so that any objects which have already gotten resolved
         // can have their copy of the object updated via the listener callbacks.
+        // 如果这个容器中已经解析了抽象类型，那么我们将启动反弹侦听器，以便任何已经解析的对象都可以通过侦听器回调更新其对象的副本
         if ($this->resolved($abstract)) {
             $this->rebound($abstract);
         }
@@ -337,7 +342,7 @@ class Container implements ArrayAccess, ContainerContract
 
     /**
      * Register a shared binding in the container.
-     *
+     * 注册一个共享的绑定实例到容器中（即单例）
      * @param  string  $abstract
      * @param  \Closure|string|null  $concrete
      * @return void
@@ -375,34 +380,45 @@ class Container implements ArrayAccess, ContainerContract
 
     /**
      * Register an existing instance as shared in the container.
-     *
+     * 将现有实例注册为容器中的共享
      * @param  string  $abstract
      * @param  mixed   $instance
      * @return mixed
      */
     public function instance($abstract, $instance)
     {
+        //①从别名缓存中移除指定的别名 （即从abstractAlias属性数组中移除）
         $this->removeAbstractAlias($abstract);
-
+        //②确定指定的抽象类型是否已经绑定 （在bindings、instances、aliases属性数组存在相应名称的键值即为已经绑定）
         $isBound = $this->bound($abstract);
-
+        //从aliases属性数组中移除
         unset($this->aliases[$abstract]);
 
         // We'll check to determine if this type has been bound before, and if it has
         // we will fire the rebound callbacks registered with the container and it
         // can be updated with consuming classes that have gotten resolved here.
+        // 我们会检测这种类型是否在之前已经被绑定，如果已经绑定，我们会执行在容器中注册的rebound（重新绑定）回调，
+        // 并且使用这里解析的消费类来更新它。
+
+        /**
+         * 简单的说就是，注册实例的步骤就是，先从抽象别名缓存数组中移除，然后从别名数组中移除；判断是否已被绑定，如果被绑定，
+         * 执行相对应的rebound回调，
+         */
+
+        //绑定名称到instances属性
         $this->instances[$abstract] = $instance;
 
+        //如果已经绑定，执行相对应的已注册的rebound回调
         if ($isBound) {
             $this->rebound($abstract);
         }
-
+        //返回实例本身 （可能是字符串|对象|callback等）
         return $instance;
     }
 
     /**
      * Remove an alias from the contextual binding alias cache.
-     *
+     * 从绑定的别名缓存中移除一个别名。（$this->abstractAliases中移除）
      * @param  string  $searched
      * @return void
      */
@@ -591,7 +607,7 @@ class Container implements ArrayAccess, ContainerContract
 
     /**
      * Resolve the given type from the container.
-     *
+     * 从容器中解析给定的抽象类型
      * @param  string  $abstract
      * @param  array  $parameters
      * @return mixed
@@ -1119,7 +1135,7 @@ class Container implements ArrayAccess, ContainerContract
 
     /**
      * Drop all of the stale instances and aliases.
-     *
+     * 删除所有旧的实例和别名（根据给定的抽象名称）
      * @param  string  $abstract
      * @return void
      */
