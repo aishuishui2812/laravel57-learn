@@ -36,6 +36,8 @@ class RoutingServiceProvider extends ServiceProvider
      */
     protected function registerRouter()
     {
+        //实际上就是向application对象的bindings属性数组中添加router
+        //  bindings['router'] = ['concrete' =>function ($app) {return new Router($app['events'], $app);}, 'shared' => true];
         $this->app->singleton('router', function ($app) {
             return new Router($app['events'], $app);
         });
@@ -43,7 +45,7 @@ class RoutingServiceProvider extends ServiceProvider
 
     /**
      * Register the URL generator service.
-     *
+     * 注册一个url生成服务
      * @return void
      */
     protected function registerUrlGenerator()

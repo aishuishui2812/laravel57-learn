@@ -239,7 +239,7 @@ class Container implements ArrayAccess, ContainerContract
         // rebound listener so that any objects which have already gotten resolved
         // can have their copy of the object updated via the listener callbacks.
         // 如果这个容器中已经解析了抽象类型，那么我们将启动反弹侦听器，以便任何已经解析的对象都可以通过侦听器回调更新其对象的副本
-        if ($this->resolved($abstract)) {
+        if ($this->resolved($abstract)) { //是否存在instances或者resolved属性数组中
             $this->rebound($abstract);
         }
     }
@@ -349,7 +349,7 @@ class Container implements ArrayAccess, ContainerContract
      */
     public function singleton($abstract, $concrete = null)
     {
-        $this->bind($abstract, $concrete, true);
+        $this->bind($abstract, $concrete, true);  //向bindings属性数组中添加
     }
 
     /**
@@ -608,6 +608,7 @@ class Container implements ArrayAccess, ContainerContract
     /**
      * Resolve the given type from the container.
      * 从容器中解析给定的抽象类型
+     * 这个就是从bindings中找出指定键值为$abstract的concrete
      * @param  string  $abstract
      * @param  array  $parameters
      * @return mixed
@@ -631,7 +632,7 @@ class Container implements ArrayAccess, ContainerContract
 
     /**
      * Resolve the given type from the container.
-     *
+     * 从容器中解析给定的类型
      * @param  string  $abstract
      * @param  array  $parameters
      * @return mixed
@@ -765,7 +766,7 @@ class Container implements ArrayAccess, ContainerContract
 
     /**
      * Instantiate a concrete instance of the given type.
-     *
+     * 实例化给定类型的对象实例。
      * @param  string  $concrete
      * @return mixed
      *
@@ -776,15 +777,20 @@ class Container implements ArrayAccess, ContainerContract
         // If the concrete type is actually a Closure, we will just execute it and
         // hand back the results of the functions, which allows functions to be
         // used as resolvers for more fine-tuned resolution of these objects.
+        // 如果实体类型是一个闭包,我们只需要去执行它,返回函数的运行结果,
+        // 这允许函数用作解析器，以便更精细地分析这些对象
         if ($concrete instanceof Closure) {
             return $concrete($this, $this->getLastParameterOverride());
         }
 
+        // 如果concrete是一个类
         $reflector = new ReflectionClass($concrete);
 
         // If the type is not instantiable, the developer is attempting to resolve
         // an abstract type such as an Interface of Abstract Class and there is
         // no binding registered for the abstractions so we need to bail out.
+        // 如果类型是不可实例化的，那么开发人员将尝试解析抽象类型，比如抽象类的接口，
+        // 并且没有为抽象注册的绑定，因此我们需要退出。
         if (! $reflector->isInstantiable()) {
             return $this->notInstantiable($concrete);
         }
@@ -796,17 +802,21 @@ class Container implements ArrayAccess, ContainerContract
         // If there are no constructors, that means there are no dependencies then
         // we can just resolve the instances of the objects right away, without
         // resolving any other types or dependencies out of these containers.
+        // 如果没有构造器,这意味着没有依赖项，那么我们可以立即解析对象的实例，而不用从这些容器中解析任何其他类型或依赖项
         if (is_null($constructor)) {
             array_pop($this->buildStack);
 
             return new $concrete;
         }
 
+        //获取构造器中的参数(可能是标量类型,也可能是依赖类)
         $dependencies = $constructor->getParameters();
 
         // Once we have all the constructor's parameters we can create each of the
         // dependency instances and then use the reflection instances to make a
         // new instance of this class, injecting the created dependencies in.
+        // 一旦拥有了所有构造函数的参数，我们就可以创建每个依赖实例，
+        // 然后使用反射实例来创建这个类的新实例，将创建的依赖注入其中。
         $instances = $this->resolveDependencies(
             $dependencies
         );
@@ -818,7 +828,7 @@ class Container implements ArrayAccess, ContainerContract
 
     /**
      * Resolve all of the dependencies from the ReflectionParameters.
-     *
+     * 从ReflectionParameters中解析所有的依赖项
      * @param  array  $dependencies
      * @return array
      */
@@ -839,6 +849,8 @@ class Container implements ArrayAccess, ContainerContract
             // If the class is null, it means the dependency is a string or some other
             // primitive type which we can not resolve since it is not a class and
             // we will just bomb out with an error since we have no-where to go.
+            // 如果类为空，则意味着依赖项是字符串或其他一些我们不能解决的原语类型，因为它不是类，
+            // 并且由于我们无处可去，因此我们将只抛出错误。
             $results[] = is_null($dependency->getClass())
                             ? $this->resolvePrimitive($dependency)
                             : $this->resolveClass($dependency);
