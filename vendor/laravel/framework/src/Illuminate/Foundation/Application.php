@@ -200,7 +200,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
 
     /**
      * Run the given array of bootstrap classes.
-     *
+     * 运行给定的预加载类数组
      * @param  array  $bootstrappers
      * @return void
      */
@@ -211,7 +211,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         foreach ($bootstrappers as $bootstrapper) {
             $this['events']->fire('bootstrapping: '.$bootstrapper, [$this]);
 
-            $this->make($bootstrapper)->bootstrap($this);
+            $this->make($bootstrapper)->bootstrap($this); //实例化bootstrapper类,并执行相应的bootstrap方法
 
             $this['events']->fire('bootstrapped: '.$bootstrapper, [$this]);
         }

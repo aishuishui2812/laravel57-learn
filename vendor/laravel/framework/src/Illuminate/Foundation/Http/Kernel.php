@@ -30,7 +30,7 @@ class Kernel implements KernelContract
 
     /**
      * The bootstrap classes for the application.
-     *
+     * 应用程序引导预加载类库
      * @var array
      */
     protected $bootstrappers = [
@@ -133,7 +133,7 @@ class Kernel implements KernelContract
 
     /**
      * Send the given request through the middleware / router.
-     *
+     * 发送给定的请求经过中间件/路由
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */

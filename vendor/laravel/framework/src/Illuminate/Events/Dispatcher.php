@@ -171,7 +171,7 @@ class Dispatcher implements DispatcherContract
 
     /**
      * Fire an event and call the listeners.
-     *
+     * 触发事件并执行监听。
      * @param  string|object  $event
      * @param  mixed  $payload
      * @param  bool  $halt
@@ -199,6 +199,7 @@ class Dispatcher implements DispatcherContract
             $event, $payload
         );
 
+        //是否需要广播
         if ($this->shouldBroadcast($payload)) {
             $this->broadcastEvent($payload[0]);
         }
@@ -282,7 +283,7 @@ class Dispatcher implements DispatcherContract
 
     /**
      * Get all of the listeners for a given event name.
-     *
+     * 获取给定事件的所有监听
      * @param  string  $eventName
      * @return array
      */
@@ -560,7 +561,7 @@ class Dispatcher implements DispatcherContract
 
     /**
      * Set the queue resolver implementation.
-     *
+     * 设置队列解析器实现。
      * @param  callable  $resolver
      * @return $this
      */
