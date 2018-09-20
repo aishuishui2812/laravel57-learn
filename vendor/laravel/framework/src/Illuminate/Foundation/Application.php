@@ -145,8 +145,10 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         //向容器注册基础的绑定  向instances属性数组中添加3个元素
         $this->registerBaseBindings();
 
+        //注册基本服务提供者
         $this->registerBaseServiceProviders();
 
+        //注册主要的容器别名
         $this->registerCoreContainerAliases();
     }
 
@@ -729,7 +731,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
 
     /**
      * Resolve the given type from the container.
-     *
+     * 从容器中解析实例根据给定的类型
      * (Overriding Container::make)
      *
      * @param  string  $abstract

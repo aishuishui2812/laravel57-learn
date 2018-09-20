@@ -65,9 +65,9 @@ class Kernel implements KernelContract
 
     /**
      * The priority-sorted list of middleware.
-     *
+     * 中间件优先级排序列表
      * Forces the listed middleware to always be in the given order.
-     *
+     * 强制列出的中间件按照给定的顺序
      * @var array
      */
     protected $middlewarePriority = [
@@ -81,7 +81,7 @@ class Kernel implements KernelContract
 
     /**
      * Create a new HTTP kernel instance.
-     *
+     * 创建一个新的HTTP核心实例
      * @param  \Illuminate\Contracts\Foundation\Application  $app
      * @param  \Illuminate\Routing\Router  $router
      * @return void

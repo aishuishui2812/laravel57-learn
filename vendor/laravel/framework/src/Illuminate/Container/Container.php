@@ -218,7 +218,7 @@ class Container implements ArrayAccess, ContainerContract
         // without being forced to state their classes in both of the parameters.
         // 如果没有给定第二个参数（或者空），我们将简单地将第二个参数（具体类型）设置和第一个参数相同的值（抽象类型），
         // 在此之后，要注册为共享的具体类型，而不必强制在这两个参数中声明它们的类。
-        $this->dropStaleInstances($abstract);
+        $this->dropStaleInstances($abstract);  //删除旧的实例和别名
 
         if (is_null($concrete)) {
             $concrete = $abstract;
@@ -246,7 +246,7 @@ class Container implements ArrayAccess, ContainerContract
 
     /**
      * Get the Closure to be used when building a type.
-     *
+     * 构建闭包
      * @param  string  $abstract
      * @param  string  $concrete
      * @return \Closure
@@ -342,7 +342,7 @@ class Container implements ArrayAccess, ContainerContract
 
     /**
      * Register a shared binding in the container.
-     * 注册一个共享的绑定实例到容器中（即单例）
+     * 注册一个共享的绑定到容器中
      * @param  string  $abstract
      * @param  \Closure|string|null  $concrete
      * @return void
@@ -675,8 +675,9 @@ class Container implements ArrayAccess, ContainerContract
         // If the requested type is registered as a singleton we'll want to cache off
         // the instances in "memory" so we can return it later without creating an
         // entirely new instance of an object on each subsequent request for it.
+        // 如果所请求的类型被注册为单个实例，那么我们希望缓存掉“内存”中的实例，这样我们以后就可以返回它，而无需在对象的每个后续请求上创建一个全新的实例
         if ($this->isShared($abstract) && ! $needsContextualBuild) {
-            $this->instances[$abstract] = $object;
+            $this->instances[$abstract] = $object;  //instances属性数组中存储的是已被解析，同时也是bindings属性数组中shared为true的对象
         }
 
         $this->fireResolvingCallbacks($abstract, $object);
@@ -684,7 +685,8 @@ class Container implements ArrayAccess, ContainerContract
         // Before returning, we will also set the resolved flag to "true" and pop off
         // the parameter overrides for this build. After those two things are done
         // we will be ready to return back the fully constructed class instance.
-        $this->resolved[$abstract] = true;
+
+        $this->resolved[$abstract] = true;  //instances属性数组中存储的是已被解析，不管bindings属性数组中shared为真或者假
 
         array_pop($this->with);
 
@@ -754,7 +756,7 @@ class Container implements ArrayAccess, ContainerContract
 
     /**
      * Determine if the given concrete is buildable.
-     *
+     * 确定给定的具体类型是否是可构建的
      * @param  mixed   $concrete
      * @param  string  $abstract
      * @return bool

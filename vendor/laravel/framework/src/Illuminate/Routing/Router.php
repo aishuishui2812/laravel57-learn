@@ -853,7 +853,7 @@ class Router implements RegistrarContract, BindingRegistrar
 
     /**
      * Register a group of middleware.
-     *
+     * 注册一个中间件组
      * @param  string  $name
      * @param  array  $middleware
      * @return $this

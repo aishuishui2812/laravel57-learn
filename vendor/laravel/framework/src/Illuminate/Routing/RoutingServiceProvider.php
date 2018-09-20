@@ -100,7 +100,7 @@ class RoutingServiceProvider extends ServiceProvider
 
     /**
      * Register the Redirector service.
-     *
+     * 注册重定向服务
      * @return void
      */
     protected function registerRedirector()
@@ -121,7 +121,7 @@ class RoutingServiceProvider extends ServiceProvider
 
     /**
      * Register a binding for the PSR-7 request implementation.
-     *
+     * 为PSR-7请求接口注册一个绑定
      * @return void
      */
     protected function registerPsrRequest()
@@ -133,7 +133,7 @@ class RoutingServiceProvider extends ServiceProvider
 
     /**
      * Register a binding for the PSR-7 response implementation.
-     *
+     * 为PSR-7响应接口注册一个绑定
      * @return void
      */
     protected function registerPsrResponse()
@@ -145,7 +145,7 @@ class RoutingServiceProvider extends ServiceProvider
 
     /**
      * Register the response factory implementation.
-     *
+     * 注册响应工厂接口
      * @return void
      */
     protected function registerResponseFactory()
@@ -157,7 +157,7 @@ class RoutingServiceProvider extends ServiceProvider
 
     /**
      * Register the controller dispatcher.
-     *
+     * 注册控制器调度器
      * @return void
      */
     protected function registerControllerDispatcher()

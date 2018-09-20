@@ -49,7 +49,7 @@ class Request extends SymfonyRequest implements Arrayable, ArrayAccess
 
     /**
      * Create a new Illuminate HTTP request from server variables.
-     *
+     * 从服务器变量创建一个新的HTTP请求。
      * @return static
      */
     public static function capture()
