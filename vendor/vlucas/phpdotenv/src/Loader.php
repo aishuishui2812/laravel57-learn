@@ -74,12 +74,13 @@ class Loader
 
     /**
      * Load `.env` file in given directory.
-     *
+     * 加载指定目录中的.env文件
+     * 确定文件可读。读入文件存入数组（每行为一个元素）。不是注释并且看着向设置语句的设置，写入环境变量中
      * @return array
      */
     public function load()
     {
-        $this->ensureFileIsReadable();
+        $this->ensureFileIsReadable(); //确定文件可读
 
         $filePath = $this->filePath;
         $lines = $this->readLinesFromFile($filePath);
@@ -94,7 +95,7 @@ class Loader
 
     /**
      * Ensures the given filePath is readable.
-     *
+     * 确定给定的路径（文件）可读
      * @throws \Dotenv\Exception\InvalidPathException
      *
      * @return void
@@ -131,7 +132,7 @@ class Loader
 
     /**
      * Process the runtime filters.
-     *
+     * 过滤
      * Called from `normaliseEnvironmentVariable` and the `VariableFactory`, passed as a callback in `$this->loadFromFile()`.
      *
      * @param string $name
@@ -141,16 +142,16 @@ class Loader
      */
     public function processFilters($name, $value)
     {
-        list($name, $value) = $this->splitCompoundStringIntoParts($name, $value);
-        list($name, $value) = $this->sanitiseVariableName($name, $value);
-        list($name, $value) = $this->sanitiseVariableValue($name, $value);
+        list($name, $value) = $this->splitCompoundStringIntoParts($name, $value);  //使用等号分割
+        list($name, $value) = $this->sanitiseVariableName($name, $value);   //处理name
+        list($name, $value) = $this->sanitiseVariableValue($name, $value);  //处理value
 
         return array($name, $value);
     }
 
     /**
      * Read lines from the file, auto detecting line endings.
-     *
+     * 从文件中读取行，自动检测行结束
      * @param string $filePath
      *
      * @return array
@@ -182,7 +183,7 @@ class Loader
 
     /**
      * Determine if the given line looks like it's setting a variable.
-     *
+     * 确定是否给定的行看起来像是在设置变量（是否存在=号）
      * @param string $line
      *
      * @return bool
@@ -194,7 +195,7 @@ class Loader
 
     /**
      * Split the compound string into parts.
-     *
+     * 根据等号进行分割行
      * If the `$name` contains an `=` sign, then we split it into 2 parts, a `name` & `value`
      * disregarding the `$value` passed in.
      *
@@ -214,7 +215,7 @@ class Loader
 
     /**
      * Strips quotes from the environment variable value.
-     *
+     * 处理等号右边的值
      * @param string $name
      * @param string $value
      *
@@ -253,7 +254,7 @@ class Loader
             $parts = explode(' #', $value, 2);
             $value = trim($parts[0]);
 
-            // Unquoted values cannot contain whitespace
+            // Unquoted values cannot contain whitespace 没有引号的值不能包含空格
             if (preg_match('/\s+/', $value) > 0) {
                 // Check if value is a comment (usually triggered when empty value with comment)
                 if (preg_match('/^#/', $value) > 0) {
@@ -269,7 +270,7 @@ class Loader
 
     /**
      * Resolve the nested variables.
-     *
+     * 解析嵌套变量。
      * Look for ${varname} patterns in the variable value and replace with an
      * existing environment variable.
      *
@@ -300,7 +301,8 @@ class Loader
 
     /**
      * Strips quotes and the optional leading "export " from the environment variable name.
-     *
+     * 去除name值左右的单双引号，以及export （带空格）字符串
+     * 这个函数就是来处理name的
      * @param string $name
      * @param string $value
      *
@@ -315,7 +317,7 @@ class Loader
 
     /**
      * Determine if the given string begins with a quote.
-     *
+     * 确定是否给定值以单引号/双引号开头
      * @param string $value
      *
      * @return bool
@@ -327,7 +329,7 @@ class Loader
 
     /**
      * Search the different places for environment variables and return first value found.
-     *
+     * 搜索给定name的环境变量，然后返回第一个搜索到的值。
      * @param string $name
      *
      * @return string|null
@@ -347,7 +349,7 @@ class Loader
 
     /**
      * Set an environment variable.
-     *
+     * 设置环境变量
      * This is done using:
      * - putenv,
      * - $_ENV,
@@ -368,6 +370,7 @@ class Loader
 
         // Don't overwrite existing environment variables if we're immutable
         // Ruby's dotenv does this with `ENV[key] ||= value`.
+        // 不要覆盖已经存在的环境变量，如果我们设置了不可改变 $this->immutable == true
         if ($this->immutable && $this->getEnvironmentVariable($name) !== null) {
             return;
         }
@@ -388,7 +391,7 @@ class Loader
 
     /**
      * Clear an environment variable.
-     *
+     * 清除环境变量
      * This is not (currently) used by Dotenv but is provided as a utility
      * method for 3rd party code.
      *

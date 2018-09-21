@@ -34,12 +34,12 @@ class Kernel implements KernelContract
      * @var array
      */
     protected $bootstrappers = [
-        \Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables::class,
-        \Illuminate\Foundation\Bootstrap\LoadConfiguration::class,
-        \Illuminate\Foundation\Bootstrap\HandleExceptions::class,
-        \Illuminate\Foundation\Bootstrap\RegisterFacades::class,
-        \Illuminate\Foundation\Bootstrap\RegisterProviders::class,
-        \Illuminate\Foundation\Bootstrap\BootProviders::class,
+        \Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables::class,   //加载环境变量
+        \Illuminate\Foundation\Bootstrap\LoadConfiguration::class,          //加载所有配置文件
+        \Illuminate\Foundation\Bootstrap\HandleExceptions::class,           //注册错误异常处理
+        \Illuminate\Foundation\Bootstrap\RegisterFacades::class,            //注册别名
+        \Illuminate\Foundation\Bootstrap\RegisterProviders::class,          //
+        \Illuminate\Foundation\Bootstrap\BootProviders::class,              //
     ];
 
     /**

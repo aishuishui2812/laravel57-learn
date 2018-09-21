@@ -12,13 +12,13 @@ class LoadEnvironmentVariables
 {
     /**
      * Bootstrap the given application.
-     *
+     * 启动应用
      * @param  \Illuminate\Contracts\Foundation\Application  $app
      * @return void
      */
     public function bootstrap(Application $app)
     {
-        if ($app->configurationIsCached()) {
+        if ($app->configurationIsCached()) {  //判断配置信息是否被缓存
             return;
         }
 
@@ -42,6 +42,7 @@ class LoadEnvironmentVariables
      */
     protected function checkForSpecificEnvironmentFile($app)
     {
+        // 判断是否运行在命令行模式
         if ($app->runningInConsole() && ($input = new ArgvInput)->hasParameterOption('--env')) {
             if ($this->setEnvironmentFilePath(
                 $app, $app->environmentFile().'.'.$input->getParameterOption('--env')

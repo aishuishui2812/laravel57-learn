@@ -53,7 +53,7 @@ class LoadConfiguration
 
     /**
      * Load the configuration items from all of the files.
-     *
+     * 从所有的配置文件中加载配置项 （此方法是该文件的核心）
      * @param  \Illuminate\Contracts\Foundation\Application  $app
      * @param  \Illuminate\Contracts\Config\Repository  $repository
      * @return void
@@ -97,7 +97,7 @@ class LoadConfiguration
 
     /**
      * Get the configuration file nesting path.
-     *
+     * 获取配置文件嵌套路径
      * @param  \SplFileInfo  $file
      * @param  string  $configPath
      * @return string

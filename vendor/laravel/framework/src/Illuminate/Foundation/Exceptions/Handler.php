@@ -51,7 +51,7 @@ class Handler implements ExceptionHandlerContract
 
     /**
      * A list of the internal exception types that should not be reported.
-     *
+     * 下面列出来的内部异常，不报
      * @var array
      */
     protected $internalDontReport = [

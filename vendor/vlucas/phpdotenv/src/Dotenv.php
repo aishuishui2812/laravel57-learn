@@ -36,13 +36,13 @@ class Dotenv
      */
     public function __construct($path, $file = '.env')
     {
-        $this->filePath = $this->getFilePath($path, $file);
+        $this->filePath = $this->getFilePath($path, $file);  //$path 就是basePath 也就是.env所在目录  $file 为.env
         $this->loader = new Loader($this->filePath, true);
     }
 
     /**
      * Load environment file in given directory.
-     *
+     * 加载环境文件
      * @return array
      */
     public function load()

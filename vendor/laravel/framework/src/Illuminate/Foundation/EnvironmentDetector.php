@@ -10,7 +10,7 @@ class EnvironmentDetector
 {
     /**
      * Detect the application's current environment.
-     *
+     * 检测应用当前环境
      * @param  \Closure  $callback
      * @param  array|null  $consoleArgs
      * @return string

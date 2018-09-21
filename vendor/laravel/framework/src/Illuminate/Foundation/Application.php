@@ -520,7 +520,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
 
     /**
      * Determine if the application is running in the console.
-     *
+     * 确定应用是否运行在命令行模式
      * @return bool
      */
     public function runningInConsole()
@@ -900,7 +900,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
 
     /**
      * Get the path to the configuration cache file.
-     *
+     * 获取配置信息的缓存文件所在路径
      * @return string
      */
     public function getCachedConfigPath()
