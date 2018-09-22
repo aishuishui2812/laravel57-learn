@@ -425,7 +425,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
 
     /**
      * Get the path to the environment file directory.
-     *
+     * 获取环境配置文件所在目录(路径)
      * @return string
      */
     public function environmentPath()
@@ -461,7 +461,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
 
     /**
      * Get the environment file the application is using.
-     *
+     * 获取环境配置文件名称
      * @return string
      */
     public function environmentFile()
@@ -890,12 +890,12 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
 
     /**
      * Determine if the application configuration is cached.
-     *
+     * 确定应用程序配置是否被缓存了
      * @return bool
      */
     public function configurationIsCached()
     {
-        return file_exists($this->getCachedConfigPath());
+        return file_exists($this->getCachedConfigPath());  // bootstrap/cache/config.php
     }
 
     /**

@@ -24,7 +24,8 @@ class LoadConfiguration
         // First we will see if we have a cache configuration file. If we do, we'll load
         // the configuration items from that file so that it is very quick. Otherwise
         // we will need to spin through every configuration file and load them all.
-        if (file_exists($cached = $app->getCachedConfigPath())) {
+        // 首先查看是否存在一个配置文件的缓存文件。如果存在,我们就加载缓存文件,那样就会很快。否则,我们就需要遍历每个文件并加载他们。
+        if (file_exists($cached = $app->getCachedConfigPath())) {  // /bootstrap/cache/config.php是否存在
             $items = require $cached;
 
             $loadedFromCache = true;
@@ -33,6 +34,8 @@ class LoadConfiguration
         // Next we will spin through all of the configuration files in the configuration
         // directory and load each one into the repository. This will make all of the
         // options available to the developer for use in various parts of this app.
+        // 接下来，我们将通过配置目录中的所有配置文件旋转，并将每个配置文件加载到存储库中。
+        // 这将使开发人员可以在该应用程序的各个部分使用所有选项。
         $app->instance('config', $config = new Repository($items));
 
         if (! isset($loadedFromCache)) {

@@ -21,14 +21,14 @@ class Dotenv
 
     /**
      * The loader instance.
-     *
+     * dotenv加载器实例
      * @var \Dotenv\Loader|null
      */
     protected $loader;
 
     /**
      * Create a new dotenv instance.
-     *
+     * 创建一个新的dotenv实例
      * @param string $path
      * @param string $file
      *
@@ -36,13 +36,14 @@ class Dotenv
      */
     public function __construct($path, $file = '.env')
     {
-        $this->filePath = $this->getFilePath($path, $file);  //$path 就是basePath 也就是.env所在目录  $file 为.env
-        $this->loader = new Loader($this->filePath, true);
+        // filePath 就是环境配置文件的文件路径信息
+        $this->filePath = $this->getFilePath($path, $file);  //默认的 $path 就是basePath 也就是.env所在目录  $file 为.env
+        $this->loader = new Loader($this->filePath, true);  //loader就是环境配置文件加载器、解析器
     }
 
     /**
      * Load environment file in given directory.
-     * 加载环境文件
+     * 加载指定目录中的环境配置文件
      * @return array
      */
     public function load()
@@ -77,7 +78,7 @@ class Dotenv
 
     /**
      * Returns the full path to the file.
-     *
+     * 获取环境配置文件的完整路径
      * @param string $path
      * @param string $file
      *
@@ -96,19 +97,20 @@ class Dotenv
 
     /**
      * Actually load the data.
-     *
+     * 真正的加载配置数据方法
      * @param bool $overload
      *
      * @return array
      */
     protected function loadData($overload = false)
     {
+        // setImmutable设置环境配置文件中的变量是否能被覆盖
         return $this->loader->setImmutable(!$overload)->load();
     }
 
     /**
      * Required ensures that the specified variables exist, and returns a new validator object.
-     *
+     * 需要确保指定的变量存在，并返回一个新的验证器对象。
      * @param string|string[] $variable
      *
      * @return \Dotenv\Validator
@@ -120,7 +122,7 @@ class Dotenv
 
     /**
      * Get the list of environment variables declared inside the 'env' file.
-     *
+     * 获取在env文件声明的环境变量列表
      * @return array
      */
     public function getEnvironmentVariableNames()

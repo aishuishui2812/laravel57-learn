@@ -57,7 +57,7 @@ class Finder implements \IteratorAggregate, \Countable
     private $notContains = array();
     private $paths = array();
     private $notPaths = array();
-    private $ignoreUnreadableDirs = false;
+    private $ignoreUnreadableDirs = false; //忽略不可读的目录
 
     private static $vcsPatterns = array('.svn', '_svn', 'CVS', '_darcs', '.arch-params', '.monotone', '.bzr', '.git', '.hg');
 
@@ -638,13 +638,14 @@ class Finder implements \IteratorAggregate, \Countable
         return iterator_count($this->getIterator());
     }
 
+    //搜索目录 返回一个迭代器
     private function searchInDirectory(string $dir): \Iterator
     {
-        if (static::IGNORE_VCS_FILES === (static::IGNORE_VCS_FILES & $this->ignore)) {
-            $this->exclude = array_merge($this->exclude, self::$vcsPatterns);
+        if (static::IGNORE_VCS_FILES === (static::IGNORE_VCS_FILES & $this->ignore)) {  //忽略代码追踪软件中的标志性文件
+            $this->exclude = array_merge($this->exclude, self::$vcsPatterns); //排除在外 ,或者说成不计在内的文件列表
         }
 
-        if (static::IGNORE_DOT_FILES === (static::IGNORE_DOT_FILES & $this->ignore)) {
+        if (static::IGNORE_DOT_FILES === (static::IGNORE_DOT_FILES & $this->ignore)) {  //忽略dotfiles,就是忽略以.开头的文件
             $this->notPaths[] = '#(^|/)\..+(/|$)#';
         }
 

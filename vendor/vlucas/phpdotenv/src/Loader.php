@@ -16,28 +16,28 @@ class Loader
 {
     /**
      * The file path.
-     *
+     * 环境配置文件的绝对路径
      * @var string
      */
     protected $filePath;
 
     /**
      * Are we immutable?
-     *
+     * 是否配置文件中的变量能被覆盖
      * @var bool
      */
     protected $immutable;
 
     /**
      * The list of environment variables declared inside the 'env' file.
-     *
+     * 在env配置文件中声明的环境变量列表数组
      * @var array
      */
     public $variableNames = array();
 
     /**
      * Create a new loader instance.
-     *
+     * 创建一个新的加载器实例
      * @param string $filePath
      * @param bool   $immutable
      *
@@ -51,7 +51,7 @@ class Loader
 
     /**
      * Set immutable value.
-     *
+     * 设置变量能否被覆盖
      * @param bool $immutable
      * @return $this
      */
@@ -64,7 +64,7 @@ class Loader
 
     /**
      * Get immutable value.
-     *
+     * 获取变量能否被覆盖
      * @return bool
      */
     public function getImmutable()
@@ -83,7 +83,7 @@ class Loader
         $this->ensureFileIsReadable(); //确定文件可读
 
         $filePath = $this->filePath;
-        $lines = $this->readLinesFromFile($filePath);
+        $lines = $this->readLinesFromFile($filePath); //把环境配置文件的每行读入进数组中并返回
         foreach ($lines as $line) {
             if (!$this->isComment($line) && $this->looksLikeSetter($line)) {
                 $this->setEnvironmentVariable($line);
@@ -109,12 +109,13 @@ class Loader
 
     /**
      * Normalise the given environment variable.
-     *
-     * Takes value as passed in by developer and:
+     * 规范给定的环境变量
+     * Takes value as passed in by developer and: 传进来的参数做如下处理:
      * - ensures we're dealing with a separate name and value, breaking apart the name string if needed,
-     * - cleaning the value of quotes,
-     * - cleaning the name of quotes,
-     * - resolving nested variables.
+     *   确保我们处理一个单独的名称和值，如果需要的话，断开名称字符串。
+     * - cleaning the value of quotes, 去除变量值中的引号
+     * - cleaning the name of quotes,  去除变量名中的引号
+     * - resolving nested variables.   解析嵌套变量
      *
      * @param string $name
      * @param string $value
@@ -123,7 +124,7 @@ class Loader
      */
     protected function normaliseEnvironmentVariable($name, $value)
     {
-        list($name, $value) = $this->processFilters($name, $value);
+        list($name, $value) = $this->processFilters($name, $value);  //对变量名和值进行过滤处理
 
         $value = $this->resolveNestedVariables($value);
 
@@ -169,7 +170,7 @@ class Loader
 
     /**
      * Determine if the line in the file is a comment, e.g. begins with a #.
-     *
+     * 确定是否这行是一行注释(就是是否以#号开头)
      * @param string $line
      *
      * @return bool

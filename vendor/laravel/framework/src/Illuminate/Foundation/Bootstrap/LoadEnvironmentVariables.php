@@ -12,7 +12,7 @@ class LoadEnvironmentVariables
 {
     /**
      * Bootstrap the given application.
-     * 启动应用
+     * 引导应用程序
      * @param  \Illuminate\Contracts\Foundation\Application  $app
      * @return void
      */
@@ -22,6 +22,7 @@ class LoadEnvironmentVariables
             return;
         }
 
+        // 检测指定的环境配置文件是否存在
         $this->checkForSpecificEnvironmentFile($app);
 
         try {
@@ -36,7 +37,7 @@ class LoadEnvironmentVariables
 
     /**
      * Detect if a custom environment file matching the APP_ENV exists.
-     *
+     * 检测是否存在一个和APP_ENV值相匹配的环境文件
      * @param  \Illuminate\Contracts\Foundation\Application  $app
      * @return void
      */
