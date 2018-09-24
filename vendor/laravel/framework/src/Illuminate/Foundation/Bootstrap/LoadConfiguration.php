@@ -77,7 +77,7 @@ class LoadConfiguration
 
     /**
      * Get all of the configuration files for the application.
-     *
+     * 获取所有的配置文件
      * @param  \Illuminate\Contracts\Foundation\Application  $app
      * @return array
      */
