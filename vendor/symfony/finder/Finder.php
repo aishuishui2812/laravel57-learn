@@ -555,7 +555,7 @@ class Finder implements \IteratorAggregate, \Countable
 
     /**
      * Returns an Iterator for the current Finder configuration.
-     *
+     * 返回一个当前配置的迭代器（供foreach迭代用）
      * This method implements the IteratorAggregate interface.
      *
      * @return \Iterator|SplFileInfo[] An iterator
